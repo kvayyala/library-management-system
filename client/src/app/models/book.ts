@@ -1,6 +1,8 @@
-import { ObjectId } from 'mongodb';
 import { Review } from './review';
 
+/**
+ * Book model as returned by the API.
+ */
 export interface Book {
     /**
      * ISBN (International Standard Book Number) of the book.
@@ -37,7 +39,7 @@ export interface Book {
      * See https://www.mongodb.com/blog/post/building-with-patterns-the-extended-reference-pattern.
      */
     authors?: Array<{
-        _id: ObjectId;
+        _id: string;
         name: string
     }>;
 
