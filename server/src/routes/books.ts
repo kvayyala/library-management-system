@@ -16,6 +16,19 @@ books.get('/', async (req, res) => {
     return res.json(await bookController.getBooks(limit, skip));
 });
 
+books.get('/search', async (req, res) => {
+    const query = (req?.query?.q as string) || undefined;
+    const limit = parseInt(req?.query?.limit as string) || undefined;
+    const skip = parseInt(req?.query?.skip as string) || undefined;
+
+    if (!query) {
+        return res.status(400).send({message: 'missing query'});
+    }
+
+    return res.json(await bookController.searchBooks(query, limit, skip));
+});
+
+
 books.post('/', protectedRoute, adminRoute, async (req: AuthRequest, res) => {
     const book = req?.body;
 
@@ -46,6 +59,7 @@ books.get('/:bookId', async (req, res) => {
 
     return res.json(book);
 });
+
 
 books.put('/:bookId', protectedRoute, adminRoute, async (req: AuthRequest, res) => {
     const bookId = req?.params?.bookId;

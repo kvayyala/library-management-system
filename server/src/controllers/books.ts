@@ -47,6 +47,25 @@ class BookController {
         return result;
     }
 
+    public async searchBooks(query: string, limit: number = 12, skip: number = 0): Promise<Book[]> {
+        console.log('limit = ' + limit + ' skip = ' + skip); // remove when these are used - added for lint happiness
+        return [
+            {
+                _id: '1',
+                totalInventory: 1,
+                available: 1,
+                year: 2020,
+                attributes: [],
+                reviews: [],
+                title: 'Test book 1',
+                genres: ['Test genre 1'],
+                synopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla euismod, nisl vitae aliquam ultricies, nunc nisl aliquet nunc, vitae aliqu',
+            }
+        ];
+    }
+
+
+
     public async updateBook(bookId: string, book: Book): Promise<UpdateResult> {
         const result = await collections?.books?.updateOne({ _id: bookId }, { $set: book });
 
