@@ -82,7 +82,7 @@ class BookController {
         return books[0];
     }
 
-    public async searchBooks(query: string): Promise<Book[]> {
+    public async searchBooksOLD(query: string): Promise<Book[]> {
         const books = await collections?.books?.find(
             {
                 $or: [
@@ -92,6 +92,23 @@ class BookController {
             }).limit(25).toArray();
         return books;
     }
+
+    public async searchBooks(query: string): Promise<Book[]> {
+        const vector = await getEmbeddings(query);
+        const aggregationPipeline = [
+          {
+            $vectorSearch: {
+              queryVector:  vector,
+              path: 'embeddings',
+              numCandidates: 100,
+              index: 'vector_index',
+              limit: 100,
+            }
+          }
+        ];
+        const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+        return books;
+      }
 
     public async createBook(book: Book): Promise<InsertOneResult> {
         const result = await collections?.books?.insertOne(book);
